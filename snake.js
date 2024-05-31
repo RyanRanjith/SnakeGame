@@ -23,7 +23,7 @@ var gameOver = false;
 // touch control variables
 var startX, startY, endX, endY;
 
-window.onload = function(){
+window.onload = function() {
     board = document.getElementById("board");
     resizeCanvas();
     context = board.getContext("2d"); //used for drawing on the board
@@ -37,7 +37,7 @@ window.onload = function(){
 
     window.addEventListener("resize", resizeCanvas, false); // Resize canvas when the window is resized
 
-    setInterval(update, 1000/10); //100 milliseconds
+    setInterval(update, 1000 / 10); //100 milliseconds
 }
 
 function resizeCanvas() {
@@ -50,83 +50,85 @@ function resizeCanvas() {
 }
 
 function update() {
-    if(gameOver){
+    if (gameOver) {
         return;
     }
 
-    context.fillStyle="black";
+    context.fillStyle = "black";
     context.fillRect(0, 0, board.width, board.height);
 
     context.fillStyle = "red";
     context.fillRect(foodX, foodY, blockSize, blockSize);
 
-    if (snakeX == foodX && snakeY == foodY){
+    if (snakeX == foodX && snakeY == foodY) {
         snakeBody.push([foodX, foodY])
         placeFood();
     }
 
-    for (let i = snakeBody.length-1; i > 0; i--){
-        snakeBody[i] = snakeBody[i-1];
+    for (let i = snakeBody.length - 1; i > 0; i--) {
+        snakeBody[i] = snakeBody[i - 1];
     }
     if (snakeBody.length) {
         snakeBody[0] = [snakeX, snakeY];
     }
 
-    context.fillStyle="lime";
+    context.fillStyle = "lime";
     snakeX += velocityX * blockSize;
     snakeY += velocityY * blockSize;
 
     context.fillRect(snakeX, snakeY, blockSize, blockSize);
-    for (let i = 0; i < snakeBody.length; i++){
+    for (let i = 0; i < snakeBody.length; i++) {
         context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize);
     }
 
     //game over conditions
-    if(snakeX < 0 || snakeX > board.width || snakeY < 0 || snakeY > board.height){
+    if (snakeX < 0 || snakeX > board.width || snakeY < 0 || snakeY > board.height) {
         gameOver = true;
         alert("Game Over");
     }
 
-    for( let i = 0; i < snakeBody.length; i++){
-        if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]){
-            gameOver= true;
+    for (let i = 0; i < snakeBody.length; i++) {
+        if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
+            gameOver = true;
             alert("Game Over");
         }
     }
 }
 
 function changeDirection(e) {
+    console.log("Key pressed: " + e.code);
     if (e.code == "ArrowUp" && velocityY != 1) {
         velocityX = 0;
         velocityY = -1;
-    }
-    else if (e.code == "ArrowDown" && velocityY != -1) {
+    } else if (e.code == "ArrowDown" && velocityY != -1) {
         velocityX = 0;
         velocityY = 1;
-    }
-    else if (e.code == "ArrowLeft" && velocityX != 1) {
+    } else if (e.code == "ArrowLeft" && velocityX != 1) {
         velocityX = -1;
         velocityY = 0;
-    }
-    else if (e.code == "ArrowRight" && velocityX != -1) {
+    } else if (e.code == "ArrowRight" && velocityX != -1) {
         velocityX = 1;
         velocityY = 0;
     }
 }
 
 function handleTouchStart(e) {
+    console.log("Touch start detected");
     const firstTouch = e.touches[0];
     startX = firstTouch.clientX;
     startY = firstTouch.clientY;
+    console.log("Touch start position: ", startX, startY);
 }
 
 function handleTouchMove(e) {
+    console.log("Touch move detected");
     if (!startX || !startY) {
         return;
     }
 
     endX = e.touches[0].clientX;
     endY = e.touches[0].clientY;
+    console.log("Touch move position: ", endX, endY);
 
     let diffX = endX - startX;
     let diffY = endY - startY;
