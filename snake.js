@@ -25,8 +25,7 @@ var startX, startY, endX, endY;
 
 window.onload = function(){
     board = document.getElementById("board");
-    board.height = rows * blockSize;
-    board.width = cols * blockSize;
+    resizeCanvas();
     context = board.getContext("2d"); //used for drawing on the board
 
     placeFood();
@@ -36,7 +35,18 @@ window.onload = function(){
     board.addEventListener("touchstart", handleTouchStart, false);
     board.addEventListener("touchmove", handleTouchMove, false);
 
+    window.addEventListener("resize", resizeCanvas, false); // Resize canvas when the window is resized
+
     setInterval(update, 1000/10); //100 milliseconds
+}
+
+function resizeCanvas() {
+    board.width = window.innerWidth;
+    board.height = window.innerHeight;
+    // Adjust the size of the snake and the grid based on the new size
+    blockSize = Math.min(board.width / cols, board.height / rows);
+    snakeX = blockSize * 5;
+    snakeY = blockSize * 5;
 }
 
 function update() {
@@ -72,7 +82,7 @@ function update() {
     }
 
     //game over conditions
-    if(snakeX < 0 || snakeX > cols*blockSize || snakeY < 0 || snakeY > rows*blockSize){
+    if(snakeX < 0 || snakeX > board.width || snakeY < 0 || snakeY > board.height){
         gameOver = true;
         alert("Game Over");
     }
