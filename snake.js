@@ -104,12 +104,14 @@ function addTouchControls() {
     let touchEndX = 0;
     let touchEndY = 0;
 
-    document.addEventListener("touchstart", function(event) {
+    board.addEventListener("touchstart", function(event) {
+        event.preventDefault();
         touchStartX = event.changedTouches[0].screenX;
         touchStartY = event.changedTouches[0].screenY;
     });
 
-    document.addEventListener("touchend", function(event) {
+    board.addEventListener("touchend", function(event) {
+        event.preventDefault();
         touchEndX = event.changedTouches[0].screenX;
         touchEndY = event.changedTouches[0].screenY;
         handleTouch();
