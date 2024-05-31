@@ -22,9 +22,20 @@ var gameOver = false;
 
 window.onload = function(){
     board = document.getElementById("board");
-    board.height = rows * blockSize;
-    board.width = cols * blockSize;
+
+    // Calculate the appropriate canvas size based on viewport size
+    var viewportWidth = window.innerWidth;
+    var viewportHeight = window.innerHeight;
+    var canvasSize = Math.min(viewportWidth, viewportHeight) * 0.9; // 90% of the smaller dimension
+    var numBlocks = Math.floor(canvasSize / blockSize);
+
+    board.height = numBlocks * blockSize;
+    board.width = numBlocks * blockSize;
     context = board.getContext("2d"); //used for drawing on the board
+
+    // Adjust rows and cols based on the new canvas size
+    rows = numBlocks;
+    cols = numBlocks;
 
     placeFood();
     document.addEventListener("keyup", changeDirection);
@@ -66,7 +77,7 @@ function update() {
     }
 
     //game over conditions
-    if(snakeX < 0 || snakeX > cols*blockSize || snakeY < 0 || snakeY > rows*blockSize){
+    if(snakeX < 0 || snakeX >= cols*blockSize || snakeY < 0 || snakeY >= rows*blockSize){
         gameOver = true;
         alert("Game Over");
     }
@@ -146,7 +157,6 @@ function addTouchControls() {
 }
 
 function placeFood() {
-    //0-1) *cols -> (0-19.9999) -> (0-19) *  25
     foodX = Math.floor(Math.random() * cols) * blockSize;
     foodY = Math.floor(Math.random() * rows) * blockSize;
 }
