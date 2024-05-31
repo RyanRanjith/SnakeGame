@@ -41,7 +41,7 @@ window.onload = function(){
     document.addEventListener("keyup", changeDirection);
     addTouchControls();
 
-    setInterval(update, 1000/10); //100 milliseconds
+    setInterval(update, 10000/50); 
 }
 
 function update() {
